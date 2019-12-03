@@ -2,10 +2,10 @@ package database
 
 import (
 	"log"
-	// pq lib
 	"github.com/gobuffalo/packr/v2"
 	"github.com/henyxia/screenator/internal/model"
 	"github.com/jmoiron/sqlx"
+	// pg lib
 	_ "github.com/lib/pq"
 	"github.com/rubenv/sql-migrate"
 )
@@ -13,6 +13,30 @@ import (
 // Database handler
 type Database struct {
 	conn *sqlx.DB
+}
+
+// GetDevices returns all devices
+func (db Database) GetDevices() []model.Device {
+	query := db.conn.Rebind("SELECT * FROM devices")
+	devices := []model.Device{}
+	err := db.conn.Select(&devices, query)
+	if err != nil {
+		log.Println("cannot get devices:", err)
+	}
+
+	return devices
+}
+
+// GetSites returns all sites
+func (db Database) GetSites() []model.Site {
+	query := db.conn.Rebind("SELECT * FROM site")
+	sites := []model.Site{}
+	err := db.conn.Select(&sites, query)
+	if err != nil {
+		log.Println("cannot get sites:", err)
+	}
+
+	return sites
 }
 
 // GetDisplay returns displays for a given mac

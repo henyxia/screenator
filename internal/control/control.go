@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/henyxia/screenator/internal/database"
+	"github.com/henyxia/screenator/internal/web"
 	"log"
 	"net/http"
 	"strconv"
@@ -66,6 +67,32 @@ func getContent(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(res, "%s", contentJSON)
 }
 
+func getDevices(res http.ResponseWriter, req *http.Request) {
+	log.Println("list all devices")
+
+	devices := db.GetDevices()
+	devicesJSON, err := json.Marshal(devices)
+	if err != nil {
+		log.Println("cannot marshal devices")
+	}
+
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintf(res, "%s", devicesJSON)
+}
+
+func getSites(res http.ResponseWriter, req *http.Request) {
+	log.Println("list all sites")
+
+	sites := db.GetSites()
+	sitesJSON, err := json.Marshal(sites)
+	if err != nil {
+		log.Println("cannot marshal sites")
+	}
+
+	res.WriteHeader(http.StatusOK)
+	fmt.Fprintf(res, "%s", sitesJSON)
+}
+
 // Start starts the control endpoint
 func Start(conn string, database database.Database, wg *sync.WaitGroup) {
 	defer wg.Done()
@@ -73,10 +100,15 @@ func Start(conn string, database database.Database, wg *sync.WaitGroup) {
 	/* store the global db handler */
 	db = database
 
+	spa := web.Handler{StaticPath: "web", IndexPath: "index.html"}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/device/searchByMac/{mac:(?:[0-9a-f]{2}:){5}[0-9a-f]{2}}", getDeviceFromMac)
 	r.HandleFunc("/device/{deviceID:[0-9]+}/display", getDeviceDisplays)
+	r.HandleFunc("/device", getDevices)
 	r.HandleFunc("/content/{contentID:[0-9]+}", getContent)
+	r.HandleFunc("/site", getSites)
+	r.PathPrefix("/").Handler(spa)
 	http.Handle("/", r)
 
 	srv := http.Server{

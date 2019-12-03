@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Screenator</title>
+    <link rel="stylesheet" href="bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  </head>
+  <body>
+
+  <script src="screenator.js"></script>
+
+  <!-- navbar -->
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" onclick="goHome()">Screenator</a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" onclick="goSiteList()">Sites</a>
+        <a class="navbar-item" onclick="goLocationList()">Locations</a>
+        <a class="navbar-item" onclick="goDeviceList()">Devices</a>
+        <a class="navbar-item" onclick="goContentList()">Content</a>
+        <a class="navbar-item" onclick="goDisplayList()">Display</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- home -->
+  <section class="section" id="home">
+    <div class="container">
+      <h1 class="title">
+        Welcome to Screenator!
+      </h1>
+      <p class="subtitle">
+        Use any buttons of the menu to start doing awesome things!
+      </p>
+    </div>
+  </section>
+
+  <!-- site -->
+  <section class="section" id="site" style="display:none">
+    <div class="container">
+      <h1 class="title">
+        Site list
+      </h1>
+    </div>
+    <table class="table">
+      <thead>
+        <th>ID</th>
+        <th>Site</th>
+      </thead>
+      <tbody id="site_list">
+      </tbody>
+    </table>
+  </section>
+
+  </body>
+</html>
